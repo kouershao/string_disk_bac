@@ -1,0 +1,11 @@
+./Result/polyfixs_t_+1.00_R_15.00_N_64_M_64_eta_1.0e+05_fixs_2.txt
+R = 15.00 t = 1.00 Energy = 0.479951969688444 normdF = 0.215049297548340
+./Result/polyfixs_t_+1.00_R_13.00_N_64_M_64_eta_1.0e+05_fixs_2.txt
+R = 13.00 t = 1.00 Energy = 0.579834972296683 normdF = 0.122664057513244
+./Result/polyfixs_t_+1.00_R_11.00_N_64_M_64_eta_1.0e+05_fixs_2.txt
+R = 11.00 t = 1.00 Energy = 0.725320518860798 normdF = 0.017365555733340
+./Result/polyfixs_t_+1.00_R_09.00_N_64_M_64_eta_1.0e+05_fixs_2.txt
+R = 9.00 t = 1.00 Energy = 0.962025912087845 normdF = 0.000333386785484
+./Result/polyfixs_t_+1.00_R_07.00_N_64_M_64_eta_1.0e+05_fixs_2.txt
+R = 7.00 t = 1.00 Energy = 1.407515465496363 normdF = 0.000335575628990
+
