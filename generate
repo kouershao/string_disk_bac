@@ -1,0 +1,2 @@
+g++ -o disk main.cpp lbfgs.c -lfftw3 -lm -O3 -std=c++11
+g++ -o point meshpoint.cpp -lfftw3 -lm -O3
