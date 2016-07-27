@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
-#include <iostream>
-#include <lbfgs.h>
-
 #include "node.h"
 #include "zernike.h"
 #include "initial.h"
@@ -15,6 +8,8 @@
 #include "in_and_out.h"
 #include "calc_vector.h"
 //#include "check.h"
+
+
 /*********************************************************************/
 void MyNode::node_initialization()
 {
@@ -28,7 +23,9 @@ void MyNode::node_initialization()
 	param.linesearch = LBFGS_LINESEARCH_BACKTRACKING_STRONG_WOLFE;
 //    check_integrate();
 }
+
 /*********************************************************************/
+
 double MyNode::cal_F(double *A, double *V, double *Q) 
 {
  
@@ -78,6 +75,7 @@ void MyNode::cal_dF(double *A, double *V, double *Q, double *grad_Energy)
 }
 
 /*********************************************************************/
+
 //lbfgsfloatval_t MyNode::evaluate(void *instance,
 		//const double *Bnm,
 		//double *grad_Energy,

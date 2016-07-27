@@ -1,4 +1,5 @@
 /Parameter/*.txt
 /Result
 /Energy
+log
 *.sw[op]

@@ -1,9 +1,5 @@
-#include <stdlib.h>
-#include <string.h>
-#include <iostream>
-#include <sstream>
-
 #include "string.h"
+
 /*********************************************************************/
 int main(int argc,const char *argv[]) 
 {
@@ -35,7 +31,7 @@ int main(int argc,const char *argv[])
 			S.initialization();
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
-			for (int k = 1; k<150; k++)
+			for (int k = 1; k < 150; k++)
 				//while (diff1 >= S.diff_tol1)
 			{
 				S.newstring();

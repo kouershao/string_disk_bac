@@ -1,13 +1,22 @@
 #ifndef _NODE_H_
 #define _NODE_H_
+
+#include <iostream>
+#include <sstream>
+#include <fstream>
+
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+
+#include <fftw3.h>
+#include <lbfgs.h>
+
 #define DIR "."
 #define PI 3.141592653589793
 #define func_type "poly"
-#include <fftw3.h>
-#include <sstream>
-#include <string.h>
-#include <iostream>
-#include <lbfgs.h>
+
 
 class MyNode
 {

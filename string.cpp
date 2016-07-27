@@ -1,10 +1,6 @@
 #include "string.h"
-#include <cmath>
-#include <iostream>
-#include <stdlib.h> 
-#include <stdio.h>
-#include "lbfgs.h"
-//#include "lbfgs_fun.h"
+#include <gsl/gsl_errno.h>                                              
+#include <gsl/gsl_spline.h>
 
 void MyString::interp1()
 { 
@@ -15,25 +11,23 @@ void MyString::interp1()
 			= gsl_interp_accel_alloc();
 	gsl_spline *spline 
 			 = gsl_spline_alloc(gsl_interp_cspline, m);
-	for (  i = 0; i < n; i++)
+	for (i = 0; i < n; i++)
 	{
-		for (  j = 0; j < m; j++)
+		for (j = 0; j < m; j++)
 		{
 			y[j] = u_new(j, i);
 			x[j] = dist(j);
 		}
 
-		gsl_spline_init (spline, x, y, m);
+		gsl_spline_init(spline, x, y, m);
 		//for(  j = 0; j < m; j += 1)
 		//{
 			//u(j, i) = gsl_spline_eval (spline, g1(j), acc);
 		//}
 		
-		j = 0;
-		for (  xx = x[0]; xx <= x[m-1]; xx += 1.0/(m-1))
+		for (j = 0, xx = x[0]; xx <= x[m-1]; xx += 1.0 / (m - 1), j++)
 		{
 			u(j, i) = gsl_spline_eval (spline, xx, acc);
-			j = j + 1;
 		}
 
 	}
