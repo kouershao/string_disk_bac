@@ -23,31 +23,38 @@ class MyNode
 	public:
 		MyNode(int arg1 = 128,int arg2 = 64,int arg3 = 64,int arg4 = 128,int arg5 = 128, double arg6 = 1e5, double arg7 = 1000, double arg8 = 1000, double arg9 = 0, double arg10 = 1, double arg11 = 1.2, double arg12 = 0, double arg13 = 1, const char* arg14 = "fixs"):
 			MaxN(arg1), N(arg2), M(arg3), I(arg4), K(arg5), eta(arg6), eta2(arg7), eta3(arg8), L21(arg9), func_B(arg10), func_C(arg11), uniaxial(arg12), anisotropy(arg13), boundary(arg14)
-		{
-			//		initialization();
-		}
+			{
+				//		initialization();
+			}
+
+		// static member
 		const int MaxN, N, M, I, K;
 		int Basis, Point, innerPoint; 
-		int readfile, mode;
-		std::stringstream suffixe;
 		double landau_t, Rad;
-		double Energy;
-		double *grad_Energy;
-		double *Anm,*Vnm,*Qik;
+
+		// non-static
+		int readfile, mode;
+		std::stringstream suffix;
+		double Energy, *grad_Energy, *Anm, *Vnm, *Qik;
 		lbfgs_parameter_t param;
 
 		void node_initialization();
-		void cal_dF(double *,double *,double *,double *); 
-		double cal_F(double *, double *, double *);
-		void iput(int,int);
-		void oput(int,int);
-		double Norm(double *,int); 
+		void cal_dF(double*, double*, double*, double*); 
+		double cal_F(double*, double*, double*);
+		void iput(int, int);
+		void oput(int, int);
+		double Norm(double*, int); 
 		void var_destroy();
 		void zer_destroy(); 
 
-		int run(int n)
+		int run(int i, int n)
 		{
-			return lbfgs(n, Anm, &Energy, _evaluate, _progress, (void*)this, &param);
+			Energy = cal_F(Anm, Vnm, Qik);
+			cal_dF(Anm, Vnm, Qik, grad_Energy);	
+
+			std::cout << i << " " << Energy*2*PI << " " << Norm(grad_Energy, n) << "|"; 
+			//	std::cout << "node = " << i << " "; 
+			return lbfgs(n, Anm, &Energy, _evaluate, _progress, this, &param);
 		}
 
 
@@ -106,7 +113,7 @@ class MyNode
 				printf("Iteration %d:  ",k);
 				printf("Energy = %16.15f  ",Energy*2*PI);
 				printf("normdF = %16.15f  step = %16.15f\n",gnorm,step);
-		//		printf("normdF = %16.15f  step = %16.15f\n",Norm(grad_Energy, n),step);
+				//		printf("normdF = %16.15f  step = %16.15f\n",Norm(grad_Energy, n),step);
 			}
 			return 0;
 		}
@@ -122,7 +129,7 @@ class MyNode
 		//void check_interpolation(int,int,char,double);
 		//void perturbation();
 
-		double *radius,*phi;
+		double *radius, *phi;
 		double *xb,*yb;
 		double *coe_r;
 		double *Rnmr,*Xm;

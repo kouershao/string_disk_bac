@@ -21,7 +21,7 @@ void MyNode::getfname(char fname[], int N, int M) {
     sprintf(strM,"%d",M);
   
   //sprintf(fname,"%s/Result/%s%s_t_%+.2f_R_%s_N_%s_M_%s_eta_%.1e_L21_%+.1f_%s.txt",DIR,func_type,boundary,t,strR,strN,strM,eta,L21,num);  
-  sprintf(fname,"%s/Result/%s%s_t_%+.2f_R_%s_N_%s_M_%s_eta_%.1e_%s.txt",DIR,func_type,boundary,landau_t,strR,strN,strM,eta,suffixe.str().c_str());
+  sprintf(fname,"%s/Result/%s%s_t_%+.2f_R_%s_N_%s_M_%s_eta_%.1e_%s.txt",DIR,func_type,boundary,landau_t,strR,strN,strM,eta,suffix.str().c_str());
   printf("%s\n", fname);
 }
 

@@ -3,7 +3,7 @@
 /*********************************************************************/
 int main(int argc,const char *argv[]) 
 {
-	double fr_Rad,fr_t,fr_eta,st_Rad,st_t,st_eta,ed_Rad,ed_t,ed_eta;
+	double Rad, t, eta, st_Rad, st_t, st_eta, ed_Rad, ed_t, ed_eta;
 
 	argv[1] = "fixs_1";
 	std::stringstream filename("");
@@ -24,11 +24,11 @@ int main(int argc,const char *argv[])
 	ed_t = 1;
 	MyString S;
 	// for (eta = st_eta;eta <= ed_eta;eta = eta*1.1) {
-	for (S.node.Rad = st_Rad;S.node.Rad <= ed_Rad;S.node.Rad += 2) 
+	for (Rad = st_Rad; Rad <= ed_Rad; Rad += 2) 
 	{
-		for (S.node.landau_t = st_t;S.node.landau_t >= ed_t;S.node.landau_t -= 1) 
+		for (t = st_t; t >= ed_t; t -= 1) 
 		{
-			S.initialization();
+			S.initialization(Rad, t);
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
 			for (int k = 1; k < 150; k++)
@@ -49,11 +49,11 @@ int main(int argc,const char *argv[])
 			fflush(fp);
 		}
 	}
-//}
+	//}
 	S.end(); 
 	fclose(fp);
 	return 0;
 }
-	
-	
-	
+
+
+

@@ -1,16 +1,17 @@
 #include "string.h"
+#include <thread>
 #include <gsl/gsl_errno.h>                                              
 #include <gsl/gsl_spline.h>
 
 void MyString::interp1()
 { 
-	
+
 	double xx, yy, x[m], y[m];
 	int i, j;
 	gsl_interp_accel *acc 
-			= gsl_interp_accel_alloc();
+		= gsl_interp_accel_alloc();
 	gsl_spline *spline 
-			 = gsl_spline_alloc(gsl_interp_cspline, m);
+		= gsl_spline_alloc(gsl_interp_cspline, m);
 	for (i = 0; i < n; i++)
 	{
 		for (j = 0; j < m; j++)
@@ -22,9 +23,9 @@ void MyString::interp1()
 		gsl_spline_init(spline, x, y, m);
 		//for(  j = 0; j < m; j += 1)
 		//{
-			//u(j, i) = gsl_spline_eval (spline, g1(j), acc);
+		//u(j, i) = gsl_spline_eval (spline, g1(j), acc);
 		//}
-		
+
 		for (j = 0, xx = x[0]; xx <= x[m-1]; xx += 1.0 / (m - 1), j++)
 		{
 			u(j, i) = gsl_spline_eval (spline, xx, acc);
@@ -33,13 +34,13 @@ void MyString::interp1()
 	}
 	//for( int i = 0; i < m; i += 1)
 	//{
-		//for( int j = 0; j < n*n; j += 1)
-		//{
-			//if (u_new(i, j)>0){ 		
-				//std::cout << i << " " << j << " "<< u(i, j) << std::endl;
-			//}
-		//}
-		
+	//for( int j = 0; j < n*n; j += 1)
+	//{
+	//if (u_new(i, j)>0){ 		
+	//std::cout << i << " " << j << " "<< u(i, j) << std::endl;
+	//}
+	//}
+
 	//}
 
 	gsl_spline_free (spline);
@@ -57,7 +58,7 @@ void MyString::distance()
 		dist(i) = ((du.array().square().rowwise().sum()).array().sqrt()).head(i).sum();
 	}
 	dist = dist.array()/dist(m-1);
-//	std::cout << dist << std::endl;
+	//	std::cout << dist << std::endl;
 }
 
 
@@ -65,70 +66,77 @@ void MyString::newstring()
 {
 	int ret;
 	u_old = u;
-	for( int i = 0; i < m; i += 1)
-	{
-		for( int j = 0; j < n; j += 1)
-		{
-			node.Anm[j] = u(i,j);
-		}
-		node.Energy = node.cal_F(node.Anm, node.Vnm, node.Qik);
-		node.cal_dF(node.Anm, node.Vnm, node.Qik, node.grad_Energy);	
-		
-		std::cout << i << " " << node.Energy*2*PI << " " << node.Norm(node.grad_Energy, n) << "|"; 
-	//	std::cout << "node=" << i << " "; 
-		ret = node.run(n);
-		for( int j = 0; j < n; j += 1)
-		{
-			u_new(i, j) = node.Anm[j];
-		}
-	}
+
+	std::vector<std::thread> ths;
+	for(int i = 0; i < m; i++)
+		ths.push_back(std::thread(&MyString::inneriter, this, i));
+	for(int i = 0; i < m; i++)
+		ths[i].join();
+
+	// thread.join
+
 	std::cout << std::endl;
 }
 
-void MyString::initialization()
+int MyString::inneriter(int i)
 {
-	node.node_initialization();
-	n = 5 * node.Basis;
+	for(int j = 0; j < n; j += 1)
+		nodes[i].Anm[j] = u(i, j);
+	int ret = nodes[i].run(i, n);
+	for(int j = 0; j < n; j += 1)
+		u_new(i, j) = nodes[i].Anm[j];
+	return ret;
+}
+
+void MyString::initialization(double Rad, double t)
+{
+	nodes = std::vector<MyNode>(m);
+	std::for_each(nodes.begin(), nodes.end(), [Rad, t](MyNode &node) {
+		node.node_initialization();
+		node.readfile = 1;
+		node.mode = 0;
+		node.Rad = Rad;
+		node.landau_t = t;
+	});
+
+	n = 5 * nodes[0].Basis;
 	u.setZero(m, n);
 	u_new.setZero(m, n);
 	u_old.setZero(m, n);
-	node.readfile =1;node.mode = 0;
 
-	for( int i = 0; i < m; i += 1)
+	for(int i = 0; i < m; i += 1)
 	{
-		//node.suffixe[0] = 'a';
-	//std::cout << "~~~~" << std::endl;
-		//node.suffixe[1] = char(i+1);
-		node.suffixe.str("");
-		node.suffixe << i+1;
-		node.iput(64, 64);
-		for( int j = 0; j < n; j += 1)
+		nodes[i].suffix.str("");
+		nodes[i].suffix << i+1;
+		nodes[i].iput(64, 64);
+		for(int j = 0; j < n; j += 1)
 		{
-			u(i, j) = node.Anm[j];
+			u(i, j) = nodes[i].Anm[j];
 		}
 	}
+
 	//for(int  i = 0; i < n; i++)
 	//{
-		//u.col(i) = Eigen::VectorXd::LinSpaced(m*3, A1[i], A2[i]).segment(m,m);
+	//    u.col(i) = Eigen::VectorXd::LinSpaced(m*3, A1[i], A2[i]).segment(m,m);
 	//}
 
-//	std::cout << u.row(m-1) << std::endl;
+	//std::cout << u.row(m-1) << std::endl;
 }
 
 double MyString::error()
 {	
-//	u_old = Eigen::node.MatrixXd::Zero(m, n*n);
 	//for( int i = 0; i < m; i += 1)
 	//{
 		//for( int j = 0; j < n; j += 1)
 		//{
 			//if (u(i,j)-u_old(i,j)!=0){
-			//std::cout << u(i, j)-u_old(i, j) << std::endl;
+				//std::cout << u(i, j)-u_old(i, j) << std::endl;
 			//}	
 		//}
-		
+
 	//}
 	//std::cout << (u-u_old) << std::endl;
+	
 	double err = 0;
 	//for( int i = 0; i < m; i += 1)
 	//{
@@ -140,7 +148,7 @@ double MyString::error()
 	//err.setZero(m);
 	//for( int i = 0; i < m; i += 1)
 	//{
-		//err(i) = (u.row(i)-u_old.row(i)).norm();
+	//    err(i) = (u.row(i)-u_old.row(i)).norm();
 	//}
 	//return (err.maxCoeff() / h);
 }
@@ -149,32 +157,32 @@ void MyString::result()
 {
 	//double Fbulk,Felas,Fpena,Fbeta,Energy,normdF;
 	Eigen::VectorXd Ve(m);
-	for( int i = 0; i < m; i += 1)
+	for(int i = 0; i < m; i++)
 	{
-		//node.suffixe[0] = 'a';
-		//node.suffixe[1] = char(i+1);
-		node.suffixe.str("");
-		node.suffixe  << i+1; 
+		nodes[i].suffix.str("");
+		nodes[i].suffix  << i + 1; 
 		for( int j = 0; j < n; j += 1)
 		{
-			node.Anm[j] = u_old(i, j);	
+			nodes[i].Anm[j] = u_old(i, j);	
 		}
-		node.Energy = node.cal_F(node.Anm, node.Vnm, node.Qik);
-		node.cal_dF(node.Anm, node.Vnm, node.Qik, node.grad_Energy);	
-		fprintf(fp,"R = %.2f t = %.2f Energy = %16.15f normdF = %16.15f\n", node.Rad, node.landau_t,node.Energy*2*PI, node.Norm(node.grad_Energy,n));
-		Ve(i) = node.Energy*2*PI;
-		node.oput(node.N,node.M);
+		nodes[i].Energy = nodes[i].cal_F(nodes[i].Anm, nodes[i].Vnm, nodes[i].Qik);
+		nodes[i].cal_dF(nodes[i].Anm, nodes[i].Vnm, nodes[i].Qik, nodes[i].grad_Energy);	
+		fprintf(fp,"R = %.2f t = %.2f Energy = %16.15f normdF = %16.15f\n", nodes[i].Rad, nodes[i].landau_t,nodes[i].Energy*2*PI, nodes[i].Norm(nodes[i].grad_Energy,n));
+		Ve(i) = nodes[i].Energy*2*PI;
+		nodes[i].oput(nodes[i].N,nodes[i].M);
 	}
-		
+
 	int num;
 	Ve.maxCoeff(&num);
-	
+
 	std::cout << "Ve " << std::endl << Ve.transpose() << std::endl;
 	std::cout << "saddle num " << std::endl << num+1 << std::endl;
 }
 
 void MyString::end()
 {
-  node.zer_destroy();
-  node.var_destroy();
+	std::for_each(nodes.begin(), nodes.end(), [](MyNode &node) {
+		node.zer_destroy();
+		node.var_destroy();
+	});
 }
