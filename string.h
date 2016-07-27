@@ -4,6 +4,7 @@
 #include <eigen3/Eigen/Dense>
 #include "node.h"
 
+
 class MyString
 {
 	public:

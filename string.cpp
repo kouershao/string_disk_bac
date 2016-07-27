@@ -88,7 +88,7 @@ void MyString::newstring()
 void MyString::initialization()
 {
 	node.node_initialization();
-	n = 5*node.Basis;
+	n = 5 * node.Basis;
 	u.setZero(m, n);
 	u_new.setZero(m, n);
 	u_old.setZero(m, n);
