@@ -1,4 +1,4 @@
-all:test
+all : test
 
 CC=g++
 WARNING=-Wall -Wunused-variable 
