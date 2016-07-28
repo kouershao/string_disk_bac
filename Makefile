@@ -1,10 +1,8 @@
 all:test
 
 CC=g++
-DEBUG=-g
-OPT=-O3
 WARNING=-Wall -Wunused-variable 
-LDFLAGS=-pthread -lfftw3 -lm -lgsl -lgslcblas -llbfgs -std=c++11
+LDFLAGS=-pthread -lfftw3 -lm -lgsl -lgslcblas -llbfgs -std=c++11 -O3
 
 src = main.cpp myString.cpp myNode.cpp
 inc = myString.h myNode.h

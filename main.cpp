@@ -1,11 +1,10 @@
 #include "myString.h"
 
 /*********************************************************************/
-int main(int argc,const char *argv[]) 
+int main(int argc, const char *argv[]) 
 {
 	double Rad, t, eta, st_Rad, st_t, st_eta, ed_Rad, ed_t, ed_eta;
 
-	argv[1] = "fixs_1";
 	std::stringstream filename("");
 	if(argc <= 1) { std::cout << "no parameter 1" << std::endl; return 1; }
 	filename << "./Energy/energy_" << argv[1] << ".txt";
@@ -31,7 +30,7 @@ int main(int argc,const char *argv[])
 			S.initialization(Rad, t);
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
-			for (int k = 1; k < 150; k++)
+			for (int k = 1; k < 200; k++)
 				//while (diff1 >= S.diff_tol1)
 			{
 				S.newstring();
@@ -44,7 +43,7 @@ int main(int argc,const char *argv[])
 					std::cout << "nstep " << nstep << "\t diff1 " << diff1 << std::endl; 
 				}
 			}
-			S.result();
+			S.result(fp);
 			fprintf(fp,"nstep = %d diff1 = %16.15f", nstep, diff1);
 			fflush(fp);
 		}
@@ -54,6 +53,5 @@ int main(int argc,const char *argv[])
 	fclose(fp);
 	return 0;
 }
-
 
 

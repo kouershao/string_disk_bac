@@ -18,7 +18,7 @@ class MyString
 		void newstring();
 		void distance();
 		void interp1();
-		void result();
+		void result(FILE*);
 		void end();
 		double error();
 
