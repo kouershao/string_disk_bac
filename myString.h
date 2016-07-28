@@ -1,9 +1,9 @@
-#ifndef _STRING_H_
-#define _STRING_H_
+#ifndef _MY_STRING_H_
+#define _MY_STRING_H_
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
-#include "node.h"
+#include "myNode.h"
 
 class MyString
 {
