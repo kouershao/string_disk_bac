@@ -167,7 +167,7 @@ void MyString::result(FILE* fp)
 		}
 		nodes[i].Energy = nodes[i].cal_F(nodes[i].Anm, nodes[i].Vnm, nodes[i].Qik);
 		nodes[i].cal_dF(nodes[i].Anm, nodes[i].Vnm, nodes[i].Qik, nodes[i].grad_Energy);	
-		fprintf(fp,"R = %.2f t = %.2f Energy = %16.15f normdF = %16.15f\n", nodes[i].Rad, nodes[i].landau_t,nodes[i].Energy*2*PI, nodes[i].Norm(nodes[i].grad_Energy,n));
+		fprintf(fp,"node = %d R = %.2f t = %.2f Energy = %16.15f normdF = %16.15f\n", i, nodes[i].Rad, nodes[i].landau_t,nodes[i].Energy*2*PI, nodes[i].Norm(nodes[i].grad_Energy,n));
 
 		Ve(i) = nodes[i].Energy*2*PI;
 		nodes[i].oput(nodes[i].N,nodes[i].M);
