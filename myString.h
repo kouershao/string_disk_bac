@@ -8,7 +8,7 @@
 class MyString
 {
 	public:
-		MyString(int arg1 = 20, double arg2 = 0.01, double arg3 = 1e-8):
+		MyString(int arg1 = 20, double arg2 = 1e-7, double arg3 = 1e-8):
 			m(arg1), diff_tol1(arg2), h(arg3) { }
 		double diff_tol1;
 		int n;

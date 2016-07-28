@@ -138,12 +138,12 @@ double MyString::error()
 	//std::cout << (u-u_old) << std::endl;
 	
 	double err = 0;
-	//for( int i = 0; i < m; i += 1)
-	//{
-		//err = err + (u.row(i)-u_old.row(i)).norm();
-	//}
-
-	return (u-u_old).array().abs().maxCoeff();
+	for( int i = 0; i < m; i += 1)
+	{
+		err = err + (u.row(i)-u_old.row(i)).norm();
+	}
+    return err;
+	//return (u-u_old).array().abs().maxCoeff();
 	//Eigen::VectorXd err;
 	//err.setZero(m);
 	//for( int i = 0; i < m; i += 1)
