@@ -14,10 +14,11 @@ test : $(src) $(includes)
 	#$(CC)  $(LDFLAGS) -o $@ $^ 
 
 .PHONY:
-	clean run
+	clean run ls
 
 clean:
 	-rm test
 run: test
-	./test a
-
+	[[ ! -f "log" ]] || mv log log.bak
+	./test a >log 2>&1 &
+	tail -f log

@@ -1,4 +1,4 @@
 /lib
-log
+log*
 *.sw[op]
 test
