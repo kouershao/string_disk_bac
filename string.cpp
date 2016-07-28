@@ -1,4 +1,4 @@
-#include "string.h"
+#include "myString.h"
 #include <thread>
 #include <gsl/gsl_errno.h>                                              
 #include <gsl/gsl_spline.h>
