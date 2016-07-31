@@ -1,14 +1,15 @@
 all : endfixed
 
-CC=g++
-WARNING=-Wall -Wunused-variable 
-LDFLAGS=-pthread -lfftw3 -lm -lgsl -lgslcblas -llbfgs -std=c++11 -O3
+CC=gcc
+CFLAGS=-std=c++11 -O3 #-Wall -Wunused-variable 
+LDFLAGS=-lstdc++ -lm -lfftw3 -lgsl -lgslcblas -llbfgs
+FLAGS=$(CFLAGS) $(LDFLAGS)
 
 src = main.cpp myString.cpp myNode.cpp
 inc = myString.h myNode.h
 
 endfixed : $(src) $(includes)
-	$(CC) -o $@ $(src) $(LDFLAGS) #$(WARNING)
+	$(CC) -o $@ $(src) $(FLAGS)
 
 #disk1: disk1.o
 	#$(CC)  $(LDFLAGS) -o $@ $^ 
