@@ -31,7 +31,7 @@ int main(int argc, const char *argv[])
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
 //			for (int k = 1; k < 200; k++)
-				while (diff1 >= S.diff_tol1 && nstep<1000)
+				while (diff1 >= S.diff_tol1 && nstep<100000)
 			{
 				S.newstring();
 				S.distance();

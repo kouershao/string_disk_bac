@@ -55,7 +55,7 @@ class MyNode
 			std::cout << i << " " << Energy*2*PI << " " << normdF << "|";
 			for (int j = 0; j<5*Basis; j++)
 			{
-				Anm[j] = Anm[j]- (1e-6)*grad_Energy[j]/(normdF*normdF);
+				Anm[j] = Anm[j]- (1e-8)*grad_Energy[j]/(normdF*normdF);
 			}
 			return 0;
 			//	std::cout << "node = " << i << " "; 
