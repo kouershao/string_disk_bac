@@ -110,10 +110,10 @@ class MyNode
 				int ls) {         
 			if (k % 100 == 0) 
 			{
-				//printf("Iteration %d:  ",k);
-				//printf("Energy = %16.15f  ",Energy*2*PI);
-				//printf("normdF = %16.15f  step = %16.15f\n",gnorm,step);
-				//printf("normdF = %16.15f  step = %16.15f\n",Norm(grad_Energy, n),step);
+				printf("Iteration %d:  ",k);
+				printf("Energy = %16.15f  ",Energy*2*PI);
+				printf("normdF = %16.15f  step = %16.15f\n",gnorm,step);
+				//		printf("normdF = %16.15f  step = %16.15f\n",Norm(grad_Energy, n),step);
 			}
 			return 0;
 		}
