@@ -1,4 +1,4 @@
-all : endfixed
+all : timestepfixed
 
 CC=gcc
 CFLAGS=-std=c++11 -O3 #-Wall -Wunused-variable 
@@ -8,7 +8,7 @@ FLAGS=$(CFLAGS) $(LDFLAGS)
 src = main.cpp myString.cpp myNode.cpp
 inc = myString.h myNode.h
 
-endfixed : $(src) $(includes)
+timestepfixed : $(src) $(includes)
 	$(CC) -o $@ $(src) $(FLAGS)
 
 #disk1: disk1.o
@@ -18,7 +18,7 @@ endfixed : $(src) $(includes)
 	clean run
 
 clean:
-	-rm endfixed
-run: endfixed
-	./endfixed e
+	-rm timestepfixed
+run: timestepfixed
+	./timestepfixed t
 

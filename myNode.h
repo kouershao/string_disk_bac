@@ -51,10 +51,15 @@ class MyNode
 		{
 			Energy = cal_F(Anm, Vnm, Qik);
 			cal_dF(Anm, Vnm, Qik, grad_Energy);	
-
-			std::cout << i << " " << Energy*2*PI << " " << Norm(grad_Energy, n) << "|"; 
+			double normdF = Norm(grad_Energy, n);
+			std::cout << i << " " << Energy*2*PI << " " << normdF << "|";
+			for (int j = 0; j<5*Basis; j++)
+			{
+				Anm[j] = Anm[j]- (1e-6)*grad_Energy[j]/(normdF*normdF);
+			}
+			return 0;
 			//	std::cout << "node = " << i << " "; 
-			return lbfgs(n, Anm, &Energy, _evaluate, _progress, this, &param);
+		//	return lbfgs(n, Anm, &Energy, _evaluate, _progress, this, &param);
 		}
 
 
