@@ -138,13 +138,20 @@ double MyString::error()
 
 	//}
 	//std::cout << (u-u_old) << std::endl;
-	
+	Eigen::VectorXd vector0, vector1;	
+	for( int i = 1; i < m-1; i += 1)
+	{
+		vector0 = (u.row(i)-u.row(i-1)).array()/(1.0/(m-1));
+		vector1 = u.row(i);
+		std::cout << vector0.dot(vector1)/(vector0.norm()) << " ";
+	}
+	std::cout << std::endl;
 	double err = 0;
 	for( int i = 0; i < m; i += 1)
 	{
 		err = err + (u.row(i)-u_old.row(i)).norm();
 	}
-    return err;
+	return err;
 	//return (u-u_old).array().abs().maxCoeff();
 	//Eigen::VectorXd err;
 	//err.setZero(m);
@@ -154,7 +161,6 @@ double MyString::error()
 	//}
 	//return (err.maxCoeff() / h);
 }
-
 void MyString::result(FILE* fp)
 {
 	//double Fbulk,Felas,Fpena,Fbeta,Energy,normdF;
