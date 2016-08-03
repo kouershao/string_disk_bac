@@ -26,7 +26,7 @@ class MyString
 		FILE *fp;
 		const int m;
 		double h, saddle_error;
-		Eigen::MatrixXd u, u_new, u_old;
+		Eigen::MatrixXd u, u_new, u_old, gradient;
 		Eigen::VectorXd dist;
 		int inneriter(int i);
 };

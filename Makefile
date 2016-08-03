@@ -2,7 +2,7 @@ all : endfixed
 
 CC=gcc
 CFLAGS=-std=c++11 -O3 #-Wall -Wunused-variable 
-LDFLAGS=-lstdc++ -lm -lfftw3 -lgsl -lgslcblas -llbfgs
+LDFLAGS=-pthread -lstdc++ -lm -lfftw3 -lgsl -lgslcblas -llbfgs
 FLAGS=$(CFLAGS) $(LDFLAGS)
 
 src = main.cpp myString.cpp myNode.cpp

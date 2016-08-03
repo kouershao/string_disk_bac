@@ -12,6 +12,7 @@
 
 #include <fftw3.h>
 #include <lbfgs.h>
+#include <eigen3/Eigen/Dense>
 
 #define DIR "."
 #define PI 3.141592653589793
@@ -47,11 +48,14 @@ class MyNode
 		void var_destroy();
 		void zer_destroy(); 
 
-		int run(int i, int n)
+		int run(int i, int n, Eigen::MatrixXd &gradient)
 		{
 			Energy = cal_F(Anm, Vnm, Qik);
 			cal_dF(Anm, Vnm, Qik, grad_Energy);	
-
+			for( int j = 0; j < 5*Basis; j += 1)
+			{
+				gradient(i, j) = grad_Energy[j];
+			}
 			std::cout << i << " " << Energy*2*PI << " " << Norm(grad_Energy, n) << "|"; 
 			//	std::cout << "node = " << i << " "; 
 			return lbfgs(n, Anm, &Energy, _evaluate, _progress, this, &param);
@@ -108,13 +112,13 @@ class MyNode
 				int n,
 				int k,
 				int ls) {         
-			if (k % 100 == 0) 
-			{
-				printf("Iteration %d:  ",k);
-				printf("Energy = %16.15f  ",Energy*2*PI);
-				printf("normdF = %16.15f  step = %16.15f\n",gnorm,step);
-				//		printf("normdF = %16.15f  step = %16.15f\n",Norm(grad_Energy, n),step);
-			}
+			//if (k % 100 == 0) 
+			//{
+				//printf("Iteration %d:  ",k);
+				//printf("Energy = %16.15f  ",Energy*2*PI);
+				//printf("normdF = %16.15f  step = %16.15f\n",gnorm,step);
+				////		printf("normdF = %16.15f  step = %16.15f\n",Norm(grad_Energy, n),step);
+			//}
 			return 0;
 		}
 

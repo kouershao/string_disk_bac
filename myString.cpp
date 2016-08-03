@@ -84,7 +84,7 @@ int MyString::inneriter(int i)
 	for(int j = 0; j < n; j += 1)
 		nodes[i].Anm[j] = u(i, j);
 	if (i >= 1 && i < m-1){
-	 ret = nodes[i].run(i, n);}
+	 ret = nodes[i].run(i, n, gradient);}
 	for(int j = 0; j < n; j += 1)
 		u_new(i, j) = nodes[i].Anm[j];
 	return ret;
@@ -105,11 +105,11 @@ void MyString::initialization(double Rad, double t)
 	u.setZero(m, n);
 	u_new.setZero(m, n);
 	u_old.setZero(m, n);
-
+	gradient.setZero(m, n);
 	for(int i = 0; i < m; i += 1)
 	{
 		nodes[i].suffix.str("");
-		nodes[i].suffix  << i+1;
+		nodes[i].suffix << "" << i+1;
 		nodes[i].iput(64, 64);
 		for(int j = 0; j < n; j += 1)
 		{
@@ -127,23 +127,23 @@ void MyString::initialization(double Rad, double t)
 
 double MyString::error()
 {	
-	//for( int i = 0; i < m; i += 1)
+	//Eigen::VectorXd vector0, vector1;	
+	//for( int i = 1; i < m-1; i += 1)
 	//{
-		//for( int j = 0; j < n; j += 1)
-		//{
-			//if (u(i,j)-u_old(i,j)!=0){
-				//std::cout << u(i, j)-u_old(i, j) << std::endl;
-			//}	
-		//}
-
+		//vector0 = (u_new.row(i)-u_new.row(i-1)).array()/(dist(i)-dist(i-1));
+		//vector1 = gradient.row(i);
+		//Eigen::VectorXd a = vector1.array()-vector0.dot(vector1)*vector0.array()/(vector0.squaredNorm());
+		//std::cout << i << " " << a.norm() << " | ";
 	//}
-	//std::cout << (u-u_old) << std::endl;
-	Eigen::VectorXd vector0, vector1;	
+	//std::cout << std::endl;
+	Eigen::VectorXd vector0, vector1;
+	std::cout << "node_error" << std::endl;
 	for( int i = 1; i < m-1; i += 1)
 	{
-		vector0 = (u.row(i)-u.row(i-1)).array()/(1.0/(m-1));
-		vector1 = u.row(i);
-		std::cout << vector0.dot(vector1)/(vector0.norm()) << " ";
+		vector0 = (u_new.row(i+1)-u_new.row(i)).array()/(dist(i+1)-dist(i));
+		vector1 = gradient.row(i);
+		Eigen::VectorXd a = vector1.array()-vector0.dot(vector1)*vector0.array()/(vector0.squaredNorm());
+		std::cout << i << " " << a.norm() << " | ";
 	}
 	std::cout << std::endl;
 	double err = 0;
@@ -152,14 +152,6 @@ double MyString::error()
 		err = err + (u.row(i)-u_old.row(i)).norm();
 	}
 	return err;
-	//return (u-u_old).array().abs().maxCoeff();
-	//Eigen::VectorXd err;
-	//err.setZero(m);
-	//for( int i = 0; i < m; i += 1)
-	//{
-	//    err(i) = (u.row(i)-u_old.row(i)).norm();
-	//}
-	//return (err.maxCoeff() / h);
 }
 void MyString::result(FILE* fp)
 {

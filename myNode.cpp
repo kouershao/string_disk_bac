@@ -19,7 +19,7 @@ void MyNode::node_initialization()
 	lbfgs_parameter_init(&param);
 	param.m = 10;
 	param.epsilon = 1e-5;
-	param.max_iterations = 500;
+	param.max_iterations = 100;
 	param.linesearch = LBFGS_LINESEARCH_BACKTRACKING_STRONG_WOLFE;
 //    check_integrate();
 }

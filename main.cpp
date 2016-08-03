@@ -30,7 +30,7 @@ int main(int argc, const char *argv[])
 			S.initialization(Rad, t);
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
-			while (nstep<2)
+			while (nstep<100)
 			//	while (diff1 >= S.diff_tol1 && nstep<1)
 			{
 				S.newstring();
