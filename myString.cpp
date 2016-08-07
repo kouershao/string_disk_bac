@@ -125,25 +125,20 @@ void MyString::initialization(double Rad, double t)
 	//std::cout << u.row(m-1) << std::endl;
 }
 
-double MyString::error()
+int MyString::error(FILE *fp)
 {	
-	//Eigen::VectorXd vector0, vector1;	
-	//for( int i = 1; i < m-1; i += 1)
-	//{
-		//vector0 = (u_new.row(i)-u_new.row(i-1)).array()/(dist(i)-dist(i-1));
-		//vector1 = gradient.row(i);
-		//Eigen::VectorXd a = vector1.array()-vector0.dot(vector1)*vector0.array()/(vector0.squaredNorm());
-		//std::cout << i << " " << a.norm() << " | ";
-	//}
-	//std::cout << std::endl;
 	Eigen::VectorXd vector0, vector1;
+	double s1, sa;
+	int stopnow;
 	std::cout << "node_error" << std::endl;
 	for( int i = 1; i < m-1; i += 1)
 	{
-		vector0 = (u_new.row(i+1)-u_new.row(i)).array()/(dist(i+1)-dist(i));
+		vector0 = (u_new.row(i)-u_new.row(i-1)).array()/(dist(i)-dist(i-1));
 		vector1 = gradient.row(i);
 		Eigen::VectorXd a = vector1.array()-vector0.dot(vector1)*vector0.array()/(vector0.squaredNorm());
-		std::cout << i << " " << a.norm() << " | ";
+		std::cout << i << " " << (vector1.norm()) << " " << a.norm() << " | ";
+		s1 = s1 + vector1.norm();
+		sa = sa + a.norm();
 	}
 	std::cout << std::endl;
 	double err = 0;
@@ -151,7 +146,13 @@ double MyString::error()
 	{
 		err = err + (u.row(i)-u_old.row(i)).norm();
 	}
-	return err;
+	fprintf(fp,"normdF = %16.15f  normdF_normal = %16.15f  err = %16.15f\n", s1, sa, err);
+	fflush(fp);
+	if (s1/10>sa || err<1e-6) 
+	{
+		stopnow = 1;
+	}
+	return stopnow;
 }
 void MyString::result(FILE* fp)
 {
@@ -160,7 +161,7 @@ void MyString::result(FILE* fp)
 	for(int i = 0; i < m; i++)
 	{
 		nodes[i].suffix.str("");
-		nodes[i].suffix  << i + 1; 
+		nodes[i].suffix  << "final" << i + 1; 
 		for( int j = 0; j < n; j += 1)
 		{
 			nodes[i].Anm[j] = u_old(i, j);	

@@ -27,25 +27,23 @@ int main(int argc, const char *argv[])
 	{
 		for (t = st_t; t >= ed_t; t -= 1) 
 		{
+			int stop = 0;
 			S.initialization(Rad, t);
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
-			while (nstep<100)
-			//	while (diff1 >= S.diff_tol1 && nstep<1)
+			while (nstep<100 || stop==1)
 			{
 				S.newstring();
 				S.distance();
 				S.interp1();
-				diff1 = S.error();
+				stop = S.error(fp);
 				nstep = nstep + 1;
 				//	if (nstep%10 == 0)
-				{
-					std::cout << "nstep " << nstep << "\t diff1 " << diff1 << std::endl; 
-				}
+				//{
+					std::cout << "nstep " << nstep << std::endl; 
+				//}
 			}
 			S.result(fp);
-			fprintf(fp,"nstep = %d diff1 = %16.15f", nstep, diff1);
-			fflush(fp);
 		}
 	}
 	//}

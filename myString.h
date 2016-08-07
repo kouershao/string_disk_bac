@@ -20,7 +20,7 @@ class MyString
 		void interp1();
 		void result(FILE*);
 		void end();
-		double error();
+		int error(FILE*);
 
 	private:
 		FILE *fp;
