@@ -8,7 +8,7 @@
 class MyString
 {
 	public:
-		MyString(int arg1 = 20, double arg2 = 1e-7, double arg3 = 1e-8):
+		MyString(int arg1 = 40, double arg2 = 1e-7, double arg3 = 1e-8):
 			m(arg1), diff_tol1(arg2), h(arg3) { }
 		double diff_tol1;
 		int n;
@@ -27,8 +27,9 @@ class MyString
 		const int m;
 		double h, saddle_error;
 		Eigen::MatrixXd u, u_new, u_old, gradient;
-		Eigen::VectorXd dist;
-		int inneriter(int i);
+		Eigen::VectorXd dist, Ve;
+		int inneriter(int);
+		Eigen::VectorXd perp(Eigen::VectorXd, int);
 };
 
 #endif

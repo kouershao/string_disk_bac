@@ -48,17 +48,24 @@ class MyNode
 		void var_destroy();
 		void zer_destroy(); 
 
-		int run(int i, int n, Eigen::MatrixXd &gradient)
+		int run(int i, int n, Eigen::MatrixXd &u, Eigen::MatrixXd &u_new, Eigen::MatrixXd &gradient, Eigen::VectorXd &Ve)
 		{
+			//for(int j = 0; j < n; j += 1)
+				//Anm[j] = u(i, j);
 			Energy = cal_F(Anm, Vnm, Qik);
 			cal_dF(Anm, Vnm, Qik, grad_Energy);	
 			for( int j = 0; j < 5*Basis; j += 1)
 			{
 				gradient(i, j) = grad_Energy[j];
 			}
+			Ve(i) = Energy*2*PI;
+
 			std::cout << i << " " << Energy*2*PI << " " << Norm(grad_Energy, n) << "|"; 
 			//	std::cout << "node = " << i << " "; 
 			return lbfgs(n, Anm, &Energy, _evaluate, _progress, this, &param);
+			//for(int j = 0; j < n; j += 1)
+				//u_new(i, j) = Anm[j];
+			//return 0;
 		}
 
 

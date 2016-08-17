@@ -1,8 +1,8 @@
 #include "myString.h"
+#include <cmath>
 #include <thread>
 #include <gsl/gsl_errno.h>                                              
 #include <gsl/gsl_spline.h>
-
 void MyString::interp1()
 { 
 
@@ -45,6 +45,7 @@ void MyString::interp1()
 
 	gsl_spline_free (spline);
 	gsl_interp_accel_free (acc);
+//	u = u_new;
 }
 
 void MyString::distance()
@@ -73,8 +74,15 @@ void MyString::newstring()
 	for(int i = 0; i < m; i++)
 		ths[i].join();
 
-	// thread.join
-
+	//thread.join
+	Eigen::VectorXd a;
+	a.setZero(n);
+	for (int i = 1; i < m-1; i++)
+	{
+		a = u_new.row(i) - u_old.row(i);
+		a = perp(a, i);
+		u_new.row(i) = u_old.row(i) + a.transpose();
+	}
 	std::cout << std::endl;
 }
 
@@ -84,7 +92,7 @@ int MyString::inneriter(int i)
 	for(int j = 0; j < n; j += 1)
 		nodes[i].Anm[j] = u(i, j);
 	if (i >= 1 && i < m-1){
-	 ret = nodes[i].run(i, n, gradient);}
+	 ret = nodes[i].run(i, n, u, u_new, gradient, Ve);}
 	for(int j = 0; j < n; j += 1)
 		u_new(i, j) = nodes[i].Anm[j];
 	return ret;
@@ -106,17 +114,18 @@ void MyString::initialization(double Rad, double t)
 	u_new.setZero(m, n);
 	u_old.setZero(m, n);
 	gradient.setZero(m, n);
+	Ve.setZero(m);
 	for(int i = 0; i < m; i += 1)
 	{
 		nodes[i].suffix.str("");
-		nodes[i].suffix << "" << i+1;
+		nodes[i].suffix << "40_nodes_ini_" << i+1;
 		nodes[i].iput(64, 64);
 		for(int j = 0; j < n; j += 1)
 		{
 			u(i, j) = nodes[i].Anm[j];
 		}
 	}
-
+	//u_old = u;
 	//for(int  i = 0; i < n; i++)
 	//{
 	//    u.col(i) = Eigen::VectorXd::LinSpaced(m*3, A1[i], A2[i]).segment(m,m);
@@ -124,21 +133,35 @@ void MyString::initialization(double Rad, double t)
 
 	//std::cout << u.row(m-1) << std::endl;
 }
-
+Eigen::VectorXd MyString::perp(Eigen::VectorXd vector, int i)
+{
+	Eigen::VectorXd tao;
+	tao.setZero(n);
+	if (Ve(i+1)>Ve(i)&&Ve(i)>Ve(i-1))
+	{tao = u_old.row(i+1)-u_old.row(i);}
+	else if (Ve(i+1)<Ve(i)&&Ve(i)<Ve(i-1))
+	{tao = u_old.row(i)-u_old.row(i-1);}
+	else
+	{tao = u_old.row(i+1)-u_old.row(i-1);}
+	tao = tao/(tao.norm());
+	std::cout  << i << " angle " << 180/PI*acos(tao.dot(vector)/vector.norm()) << " | ";
+	tao = (vector-tao.dot(vector)*tao);
+	//std::cout << " tao.norm() " << tao.norm() << std::endl;
+	return(tao);
+}
 int MyString::error(FILE *fp)
 {	
-	Eigen::VectorXd vector0, vector1;
-	double s1, sa;
-	int stopnow;
+	Eigen::VectorXd perpgrad;
+	double sgrad = 0, sperp = 0;
+	int stopnow = 0;
 	std::cout << "node_error" << std::endl;
 	for( int i = 1; i < m-1; i += 1)
 	{
-		vector0 = (u_new.row(i)-u_new.row(i-1)).array()/(dist(i)-dist(i-1));
-		vector1 = gradient.row(i);
-		Eigen::VectorXd a = vector1.array()-vector0.dot(vector1)*vector0.array()/(vector0.squaredNorm());
-		std::cout << i << " " << (vector1.norm()) << " " << a.norm() << " | ";
-		s1 = s1 + vector1.norm();
-		sa = sa + a.norm();
+		perpgrad.setZero(n);
+		perpgrad = perp(gradient.row(i), i);
+		//std::cout << i << " " << (gradient.row(i).norm()) << " " << perpgrad.norm() << " | ";
+		sgrad = sgrad + gradient.row(i).norm();
+		sperp = sperp + perpgrad.norm();
 	}
 	std::cout << std::endl;
 	double err = 0;
@@ -146,9 +169,9 @@ int MyString::error(FILE *fp)
 	{
 		err = err + (u.row(i)-u_old.row(i)).norm();
 	}
-	fprintf(fp,"normdF = %16.15f  normdF_normal = %16.15f  err = %16.15f\n", s1, sa, err);
+	fprintf(fp,"normdF = %16.15f  normdF_normal = %16.15f  err = %16.15f\n", sgrad, sperp, err);
 	fflush(fp);
-	if (s1/10>sa || err<1e-6) 
+	if (sgrad/10>sperp || err<1e-6) 
 	{
 		stopnow = 1;
 	}
@@ -161,7 +184,7 @@ void MyString::result(FILE* fp)
 	for(int i = 0; i < m; i++)
 	{
 		nodes[i].suffix.str("");
-		nodes[i].suffix  << "final" << i + 1; 
+		nodes[i].suffix  << "inifinal" << i + 1; 
 		for( int j = 0; j < n; j += 1)
 		{
 			nodes[i].Anm[j] = u_old(i, j);	

@@ -31,7 +31,7 @@ int main(int argc, const char *argv[])
 			S.initialization(Rad, t);
 			double diff1 = S.diff_tol1 + 1;
 			int nstep = 0;
-			while (nstep<100 || stop==1)
+			while (nstep<10000 || stop==1)
 			{
 				S.newstring();
 				S.distance();
