@@ -118,7 +118,7 @@ void MyString::initialization(double Rad, double t)
 	for(int i = 0; i < m; i += 1)
 	{
 		nodes[i].suffix.str("");
-		nodes[i].suffix << "40_nodes_ini_" << i+1;
+		nodes[i].suffix << "newini" << i+1;
 		nodes[i].iput(64, 64);
 		for(int j = 0; j < n; j += 1)
 		{
@@ -184,7 +184,7 @@ void MyString::result(FILE* fp)
 	for(int i = 0; i < m; i++)
 	{
 		nodes[i].suffix.str("");
-		nodes[i].suffix  << "inifinal" << i + 1; 
+		nodes[i].suffix  << "newinifinal" << i + 1; 
 		for( int j = 0; j < n; j += 1)
 		{
 			nodes[i].Anm[j] = u_old(i, j);	
