@@ -128,7 +128,7 @@ void MyString::initialization(double Rad, double t)
 	//u_old = u;
 	//for(int  i = 0; i < n; i++)
 	//{
-	//    u.col(i) = Eigen::VectorXd::LinSpaced(m*3, A1[i], A2[i]).segment(m,m);
+	   //u.col(i) = Eigen::VectorXd::LinSpaced(m, A1[i], A2[i]);
 	//}
 
 	//std::cout << u.row(m-1) << std::endl;

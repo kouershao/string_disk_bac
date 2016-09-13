@@ -17,10 +17,10 @@ int main(int argc, const char *argv[])
 
 	//st_eta = 1e5;
 	//ed_eta = 1e5;
-	st_Rad = 11;
-	ed_Rad = 11;
-	st_t = 1;
-	ed_t = 1;
+	st_Rad = 5;
+	ed_Rad = 5;
+	st_t = -6;
+	ed_t = -6;
 	MyString S;
 	// for (eta = st_eta;eta <= ed_eta;eta = eta*1.1) {
 	for (Rad = st_Rad; Rad <= ed_Rad; Rad += 2) 
